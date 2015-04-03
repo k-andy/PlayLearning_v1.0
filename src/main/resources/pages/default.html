@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+    <style>
+        div {width: 100%}
+    </style>
+</head>
+<body>
+<div th:include="fragments/header :: header"></div>
+<div th:include="${view} :: content"></div>
+<div th:include="fragments/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+<section th:fragment="content">
+    <div class="javaTrainingSectionWrapper" style="text-align: center">
+        <div>
+            <form action="#" th:action="@{/processCode}" th:object="${code}" method="post">
+                <textarea rows="40" cols="60" th:field="*{codeToProcess}"></textarea>
+                <input type="submit" />
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>
