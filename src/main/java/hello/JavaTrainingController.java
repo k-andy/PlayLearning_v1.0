@@ -24,7 +24,7 @@ public class JavaTrainingController {
     @RequestMapping(value = "/processCode", method = RequestMethod.POST)
     public String processForm(@ModelAttribute(value = "code") Code code, Model model) {
         System.out.println("code processing");
-        model.addAttribute("view", "fragments/contactsSection");
+        model.addAttribute("view", "fragments/javaTrainingSection");
 
         return "default";
     }
