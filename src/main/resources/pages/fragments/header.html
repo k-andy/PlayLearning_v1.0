@@ -4,14 +4,14 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-<header th:fragment="header">
+<header th:fragment="content">
     <div class="headerWrapper" style="text-align: right">
         <div>
             <div style="font-weight: bold" th:text="'Hello, ' + ${name} + '!'"></div>
         </div>
         <div class="mainLinks">
-            <span><a th:href="@{../javaTraining.html}">Java Training</a></span>
-            <span><a th:href="@{../contacts.html}">Contacts</a></span>
+            <span><a th:href="@{../sections/contentSection}">Content</a></span>
+            <span><a th:href="@{../sections/contactsSection}">Contacts</a></span>
         </div>
     </div>
 </header>

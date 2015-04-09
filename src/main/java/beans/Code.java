@@ -1,4 +1,4 @@
-package hello;
+package beans;
 
 public class Code {
     private String codeToProcess;

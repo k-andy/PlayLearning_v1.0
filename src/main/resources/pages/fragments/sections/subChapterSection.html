@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<section th:fragment="content">
+    <div class="subChapterWrapper" style="text-align: left">
+        <div th:include="${view} :: content"></div>
+    </div>
+</section>
+</body>
+</html>

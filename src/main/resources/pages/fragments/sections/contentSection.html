@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+<section th:fragment="content">
+    <div class="contentsWrapper" style="text-align: left; padding-left: 50px">
+        <h2>Curse content</h2>
+        <div th:each="contentItem : ${content}">
+            <div><span th:text="${contentItem.getNumber()} + '. '"></span><a th:href="@{javaTrainingSection.html.html}" th:text="${contentItem.getName()}"></a></div>
+            <div style="padding-left: 10px" th:each="contentItemSubChapter : ${contentItem.getSubChapters()}">
+                <div><span th:text="${contentItem.getNumber() + '.' + contentItemSubChapter.getNumber() + '. '}"></span><a th:href="@{subChapterSection(number=${contentItem.getNumber() + contentItemSubChapter.getNumber()})}" th:text="${contentItemSubChapter.getName()}"></a></div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+<section th:fragment="content">
+    <div class="javaExercisesSectionWrapper" style="text-align: center">
+        <div th:each="exercise : ${exercises}">
+            <div>
+                <div th:text="${exercise.getNumber() + '. ' + exercise.getText()}"></div>
+                <form action="#" th:action="@{/processCode(exNumber=${exerciseStat.count})}" th:object="${code}"
+                      method="post">
+                    <textarea rows="10" cols="30" th:field="*{codeToProcess}"></textarea>
+                    <input type="submit"/>
+                </form>
+            </div>
+            <div th:class="${result != null}? 'visibleResult' : 'hiddenResult'">
+                <h4>Result:</h4>
+                <div th:text="${successful}? ${result}: 'FAIL'"></div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
