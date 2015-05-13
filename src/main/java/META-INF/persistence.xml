@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="NewPersistenceUnit">
+        <class>com.playlearning.model.Role</class>
+        <class>com.playlearning.model.User</class>
+        <class>com.playlearning.model.Category</class>
+        <class>com.playlearning.model.ClasZ</class>
+        <class>com.playlearning.model.Course</class>
+        <class>com.playlearning.model.Exercise</class>
+        <class>com.playlearning.model.Field</class>
+        <class>com.playlearning.model.Lesson</class>
+        <class>com.playlearning.model.Method</class>
+        <class>com.playlearning.model.Result</class>
+        <class>com.playlearning.model.Exercise</class>
+        <class>com.playlearning.model.Result</class>
+        <class>com.playlearning.model.ClasZ</class>
+        <class>com.playlearning.model.Field</class>
+        <class>com.playlearning.model.Method</class>
+        <class>com.playlearning.model.Exercise</class>
+        <class>com.playlearning.model.LessonsEntity</class>
+        <class>com.playlearning.model.Result</class>
+        <class>com.playlearning.model.ClassesEntity</class>
+        <class>com.playlearning.model.ExercisesEntity</class>
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/playLearning"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.username"/>
+            <property name="hibernate.connection.password"/>
+            <property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3306/playLearning"/>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+            <property name="openjpa.ConnectionUserName" value="root"/>
+            <property name="openjpa.ConnectionPassword" value=""/>
+        </properties>
+    </persistence-unit>
+</persistence>

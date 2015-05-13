@@ -7,6 +7,16 @@
             use the argument list. Compile the program with javac and run it using java. If you are using a different
             development environment than the JDK, learn how to compile and run programs in that environment.
         </text>
+        <resultType>output</resultType>
+        <error>wrong output</error>
         <result>hello, world</result>
+    </exercise>
+    <exercise>
+        <number>2</number>
+        <text>Find the code fragments involving ATypeName and turn them into a program that compiles and runs.
+        </text>
+        <resultType>compilerun</resultType>
+        <error>you need to create ATypeName class and instantiate it</error>
+        <result>new ATypeName()</result>
     </exercise>
 </exercises>

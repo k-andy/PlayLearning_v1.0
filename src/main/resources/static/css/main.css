@@ -1,3 +1,29 @@
 .visibleResult {display: block;}
 .hiddenResult {display: none;}
 body {background-color: aliceblue;}
+.dataWrapper {
+    float: left;
+    width: 100%;
+}
+
+.dataBlock {
+    padding-bottom: 10px;
+    float: left;
+    width: 100%;
+}
+
+.dataLabel, .dataSelect, .dataTextField, .exerciseEditSelect {
+    float: left;
+    margin-right: 5px;
+}
+
+.dataLabel {
+    clear: left;
+}
+
+.dataButtons {
+    float: left;
+    clear: left;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

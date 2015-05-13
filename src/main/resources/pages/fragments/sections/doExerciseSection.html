@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+<section th:fragment="content">
+    <div style="text-align: left" class="doExerciseSectionWrapper">
+        <div th:text="${exercise.getNumber() + '. ' + exercise.getText()}"></div>
+        <form action="#" th:action="@{/processCode(exNumber=${exercise.getNumber()})}" th:object="${code}"
+              method="post">
+            <textarea rows="10" cols="30" th:field="*{codeToProcess}"></textarea>
+            <input type="submit"/>
+        </form>
+        <div th:if="${result}">
+            <div class="visibleResult">
+                <h4>Result:</h4>
+                <div th:text="${runSuccessful}? (${successful}? ${result}: ${exercise.getError()}) : 'you have a compilation error'"></div>
+            </div>
+        </div>
+        <button onclick="goBack()">Go Back</button>
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<header th:fragment="content">
+    <div class="headerWrapper" style="text-align: right">
+        <div>
+            <!--div style="font-weight: bold" th:text="'Hello, ' + ${name} + '!'"></div-->
+            <h1 th:inline="text">Hello <span th:text="${#httpServletRequest.remoteUser}? ${#httpServletRequest.remoteUser} : ''"></span></h1>
+            <form th:if="${#httpServletRequest.remoteUser}" th:action="@{/logout}" method="post">
+                <input type="submit" value="Sign Out"/>
+            </form>
+        </div>
+        <div class="mainLinks">
+            <span><a th:href="@{contentSection}">Content</a></span>
+            <span><a th:href="@{contactsSection}">Contacts</a></span>
+        </div>
+    </div>
+</header>
+</body>
+</html>

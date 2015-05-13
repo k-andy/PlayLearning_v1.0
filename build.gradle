@@ -14,7 +14,7 @@ apply plugin: 'spring-boot'
 
 war {
     baseName = 'PlayLearning_v1.0'
-    version =  '0.1.1'
+    version =  '0.1.0'
 }
 
 repositories {
@@ -31,6 +31,11 @@ targetCompatibility = 1.7
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.hibernate:hibernate-core:4.3.8.Final")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("mysql:mysql-connector-java:5.1.13")
+    compile("commons-dbcp:commons-dbcp:1.4")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testCompile("junit:junit")
 }
