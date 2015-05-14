@@ -37,7 +37,7 @@ public class Category {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, insertable = true, updatable = true)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 60)
     public String getName() {
         return name;
     }

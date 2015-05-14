@@ -24,7 +24,7 @@ public class Field {
     }
 
     @Basic
-    @Column(name = "names", nullable = false, insertable = true, updatable = true, length = 30)
+    @Column(name = "names", nullable = false, insertable = true, updatable = true, length = 60)
     public String getNames() {
         return names;
     }

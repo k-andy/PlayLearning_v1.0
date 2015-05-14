@@ -47,7 +47,7 @@ public class CategoriesDaoImpl implements CategoriesDao {
         List<Category> categories;
 
         categories = sessionFactory.getCurrentSession()
-                .createQuery("from Category where coursesByCourseId=?")
+                .createQuery("from Category where coursesByCourseId=? order by number")
                 .setParameter(0, Course).list();
 
         if (categories.size() > 0) {

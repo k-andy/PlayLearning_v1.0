@@ -46,7 +46,7 @@ public class LessonsDaoImpl implements LessonsDao {
         List<Lesson> lessons;
 
         lessons = sessionFactory.getCurrentSession()
-                .createQuery("from Lesson where categoriesByCategoryId=?")
+                .createQuery("from Lesson where categoriesByCategoryId=? order by number")
                 .setParameter(0, category).list();
 
         if (lessons.size() > 0) {

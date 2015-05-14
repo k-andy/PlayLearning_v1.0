@@ -25,7 +25,7 @@ public class Course {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 60)
     public String getName() {
         return name;
     }

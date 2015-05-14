@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1184909930">
+  <component name="DataSourceManagerImpl" format="xml" hash="3119097951">
     <data-source source="LOCAL" name="playLearning" uuid="b0e51efd-f575-4eb0-b998-531b9487ff40">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
@@ -19,6 +19,24 @@
       <driver-ref>sqlserver.ms</driver-ref>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
       <jdbc-url>jdbc:sqlserver://10.0.0.16;databaseName=dbYouChip_YMS</jdbc-url>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="SQL Server - dbYouChip_OnSite@10.0.0.16" uuid="3bf8486a-4490-4d64-8cac-3d7bb0ac50b2">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://10.0.0.16;databaseName=dbYouChip_OnSite</jdbc-url>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="SQL Server - dbYouChip@10.0.0.27" uuid="cbac098a-0d95-4a99-91b0-445e2f4cb715">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://10.0.0.27:1433;databaseName=dbYouChip</jdbc-url>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="SQL Server - @localho10.0.0.16" uuid="e8a5c7c3-c186-4327-8a74-0354df023b63">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://localho10.0.0.16</jdbc-url>
       <libraries />
     </data-source>
   </component>

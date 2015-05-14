@@ -26,21 +26,21 @@ $(document).ready(function () {
     $.get("/loadCourses",
         function (data, status) {
             if (data != "") {
-                $(".coursesSelect").html(data);
-                $(".coursesSelect").show();
+                $(".coursesSelect").html(data).show();
             }
             $(".courseTextField").val("")
         });
 
     $(".coursesSelect").change(function () {
         if ($(".coursesSelect").val() != -1) {
-            $(".categoriesDataBlock").show()
+            $(".categoriesDataBlock").show();
             $.get("/getCategoryNumbers",
                 {courseId: $(".coursesSelect").val()},
                 function (data, status) {
                     if (data != "") {
-                        $(".categoriesSelect").html(data);
-                        $(".categoriesSelect").show();
+                        $(".categoriesSelect").html(data).show();
+                    } else {
+                        $(".categoriesSelect").html("").hide();
                     }
                 });
         } else {
@@ -55,6 +55,8 @@ $(document).ready(function () {
 
             $(".resultCompileWrapper").hide();
             $(".resultOutputWrapper").hide();
+            $(".categoryNumber").text("");
+            $(".lessonNumber").text("");
         }
     });
 
@@ -64,10 +66,14 @@ $(document).ready(function () {
             $.get("/getLessonNumbers",
                 {categoryId: $(".categoriesSelect").val()},
                 function (data, status) {
-                    if (data != "") {
-                        $(".lessonsSelect").html(data);
-                        $(".lessonsSelect").show();
+                    if (data.length == 2) {
+                        $(".lessonsSelect").html(data[1]).show();
+                    } else {
+                        $(".lessonsSelect").html("").hide();
                     }
+                    $(".categoryNumber").text(data[0]);
+                    $(".lessonNumber").text("");
+
                 });
         } else {
             $(".lessonsDataBlock").hide();
@@ -79,6 +85,8 @@ $(document).ready(function () {
 
             $(".resultCompileWrapper").hide();
             $(".resultOutputWrapper").hide();
+            $(".categoryNumber").text("");
+            $(".lessonNumber").text("");
         }
     });
 
@@ -88,19 +96,21 @@ $(document).ready(function () {
             $.get("/getExerciseNumbers",
                 {lessonId: $(".lessonsSelect").val()},
                 function (data, status) {
-                    if (data != "") {
-                        $(".exerciseSelect").html(data);
-                        $(".exerciseSelect").show();
+                    if (data.length == 2) {
+                        $(".exerciseSelect").html(data[1]).show();
+                    } else {
+                        $(".exerciseSelect").html("").hide();
                     }
+                    $(".lessonNumber").text(data[0]);
                 });
         } else {
             $(".exercisesDataBlock").hide();
             $(".resultsDataBlock").hide();
-
             $(".exerciseSelect").hide();
 
             $(".resultCompileWrapper").hide();
             $(".resultOutputWrapper").hide();
+            $(".lessonNumber").text("");
         }
     });
     $(".exerciseSelect").change(function () {
@@ -111,14 +121,12 @@ $(document).ready(function () {
                 function (data, status) {
                     $(".resultsDataBlock").show();
                     if (data[0] == "compile") {
-                        alert("in compile");
                         $(".radioCompile").click();
                         $(".classesCompile").val(data[1]);
                         $(".methodsCompile").val(data[2]);
                         $(".fieldsCompile").val(data[3]);
                         $(".resultOutput").val("");
                     } else {
-                        alert("in output");
                         $(".radioOutput").click();
                         $(".resultOutput").val(data[1]);
                         $(".classesCompile").val("");
@@ -134,47 +142,67 @@ $(document).ready(function () {
     });
 
     $(".addOrUpdateCourse").click(function () {
-        $.get("/addOrUpdateCourse",
-            {
-                courseId: $(".coursesSelect").val() == null ? -1 : $(".coursesSelect").val(),
-                courseName: $(".courseTextField").val()
-            },
-            function (data, status) {
-                $(".coursesSelect").html(data);
-                $(".coursesSelect").show();
-                $(".categoriesDataBlock").show();
-                $(".courseTextField").val("")
-            });
+        if ($(".courseTextField").val().length != 0) {
+            $(".courseTextField").removeClass('emptyField');
+            $.get("/addOrUpdateCourse",
+                {
+                    courseId: $(".coursesSelect").val() == null ? -1 : $(".coursesSelect").val(),
+                    courseName: $(".courseTextField").val()
+                },
+                function (data, status) {
+                    $(".coursesSelect").html(data).show();
+                    $(".categoriesDataBlock").show();
+                    $(".courseTextField").val("")
+                });
+        } else {
+            $(".courseTextField").addClass('emptyField');
+        }
     });
 
     $(".addOrUpdateCategory").click(function () {
-        $.get("/addOrUpdateCategory",
-            {
-                courseId: $(".coursesSelect").val(),
-                categoryId: $(".categoriesSelect").val() == null ? -1 : $(".categoriesSelect").val(),
-                categoryName: $(".categoryTextField").val()
-            },
-            function (data, status) {
-                $(".categoriesSelect").html(data);
-                $(".categoriesSelect").show();
-                $(".lessonsDataBlock").show();
-                $(".categoryTextField").val("")
-            });
+        if ($(".categoryTextField").val().length != 0 || $(".categoryTextArea").val().length != 0) {
+            $(".categoryTextField").removeClass('emptyField');
+            $.get("/addOrUpdateCategory",
+                {
+                    courseId: $(".coursesSelect").val(),
+                    categoryId: $(".categoriesSelect").val() == null ? -1 : $(".categoriesSelect").val(),
+                    categoryName: $(".categoryTextField").val(),
+                    categoryNumber: $(".categoryNumberTextField").val(),
+                    categoryNames: $(".categoryTextArea").val()
+                },
+                function (data, status) {
+                    $(".categoriesSelect").html(data).show();
+                    $(".lessonsDataBlock").show();
+                    $(".categoryTextField").val("")
+                    $(".categoryTextArea").val("")
+                    $(".categoryNumberTextField").val("")
+                });
+        } else {
+            $(".categoryTextField").addClass('emptyField');
+        }
     });
 
     $(".addOrUpdateLesson").click(function () {
-        $.get("/addOrUpdateLesson",
-            {
-                categoryId: $(".categoriesSelect").val(),
-                lessonId: $(".lessonsSelect").val() == null ? -1 : $(".lessonsSelect").val(),
-                lessonName: $(".lessonTextField").val()
-            },
-            function (data, status) {
-                $(".lessonsSelect").html(data);
-                $(".lessonsSelect").show();
-                $(".exercisesDataBlock").show()
-                $(".lessonTextField").val("")
-            });
+        if ($(".lessonTextField").val().length != 0 || $(".lessonTextArea").val().length != 0) {
+            $(".lessonTextField").removeClass('emptyField');
+            $.get("/addOrUpdateLesson",
+                {
+                    categoryId: $(".categoriesSelect").val(),
+                    lessonId: $(".lessonsSelect").val() == null ? -1 : $(".lessonsSelect").val(),
+                    lessonName: $(".lessonTextField").val(),
+                    lessonNumber: $(".lessonNumberTextField").val(),
+                    lessonNames: $(".lessonTextArea").val()
+                },
+                function (data, status) {
+                    $(".lessonsSelect").html(data).show();
+                    $(".exercisesDataBlock").show();
+                    $(".lessonTextField").val("")
+                    $(".lessonTextArea").val("")
+                    $(".lessonNumberTextField").val("")
+                });
+        } else {
+            $(".lessonTextField").addClass('emptyField');
+        }
     });
 
     $(".addExercise").click(function () {
@@ -183,40 +211,98 @@ $(document).ready(function () {
                 lessonId: $(".lessonsSelect").val()
             },
             function (data, status) {
-                $(".exerciseSelect").html(data);
-                $(".exerciseSelect").show();
-                $(".resultsDataBlock").show()
+                $(".exerciseSelect").html(data).show();
+                $(".resultsDataBlock").show();
                 $(".radioOutput").click();
-            });
-    });
-
-    $(".addOrUpdateResultOutput").click(function () {
-        $.get("/addOrUpdateResultOutput",
-            {
-                exerciseId: $(".exerciseSelect").val(),
-                output: $(".resultOutput").val()
-            },
-            function (data, status) {
-                $(".resultOutput").val(data);
+                $(".resultOutput").val("")
                 $(".classesCompile").val("");
-                $(".methodsCompile").val("")
+                $(".methodsCompile").val("");
                 $(".fieldsCompile").val("")
             });
     });
 
+    $(".addOrUpdateResultOutput").click(function () {
+        if ($(".resultOutput").val().length != 0) {
+            $(".resultOutput").removeClass('emptyField');
+            $.get("/addOrUpdateResultOutput",
+                {
+                    exerciseId: $(".exerciseSelect").val(),
+                    output: $(".resultOutput").val()
+                },
+                function (data, status) {
+                    $(".resultOutput").val(data);
+                    $(".classesCompile").val("");
+                    $(".methodsCompile").val("");
+                    $(".fieldsCompile").val("")
+                });
+        } else {
+            $(".resultOutput").addClass('emptyField');
+        }
+    });
+
     $(".addOrUpdateResultCompile").click(function () {
-        $.get("/addOrUpdateResultCompile",
+        if ($(".classesCompile").val().length != 0) {
+            $(".classesCompile").removeClass('emptyField');
+            $(".methodsCompile").removeClass('emptyField');
+            $(".fieldsCompile").removeClass('emptyField');
+            $.get("/addOrUpdateResultCompile",
+                {
+                    exerciseId: $(".exerciseSelect").val(),
+                    classes: $(".classesCompile").val(),
+                    methods: $(".methodsCompile").val(),
+                    fields: $(".fieldsCompile").val()
+                },
+                function (data, status) {
+                    $(".classesCompile").val(data[0]);
+                    $(".methodsCompile").val(data[1]);
+                    $(".fieldsCompile").val(data[2]);
+                    $(".resultOutput").val("");
+                });
+        } else {
+            $(".classesCompile").removeClass('emptyField');
+        }
+    });
+
+    $(".addUser").click(function () {
+        if ($(".userNameTextField").val().length != 0 && $(".passwordTextField").val().length != 0 && $(".emailTextField").val().length != 0) {
+            $(".userNameTextField").removeClass('emptyField');
+            $(".passwordTextField").removeClass('emptyField');
+            $(".emailTextField").removeClass('emptyField');
+            $.get("/addUser",
+                {
+                    userName: $(".userNameTextField").val(),
+                    password: $(".passwordTextField").val(),
+                    email: $(".emailTextField").val(),
+                    roleId: $(".selectRole").val()
+                },
+                function (data, status) {
+                    userName: $(".userNameTextField").val("");
+                    password: $(".passwordTextField").val("");
+                    password: $(".emailTextField").val("");
+                });
+        } else {
+            $(".userNameTextField").length == 0 ? $(".userNameTextField").addClass('emptyField') : $(".userNameTextField").removeClass('emptyField');
+            $(".passwordTextField").length == 0 ? $(".passwordTextField").addClass('emptyField') : $(".passwordTextField").removeClass('emptyField');
+            $(".emailTextField").length == 0 ? $(".emailTextField").addClass('emptyField') : $(".emailTextField").removeClass('emptyField');
+        }
+    });
+
+    $(".createFiles").click(function () {
+        $.get("/createFiles",
             {
-                exerciseId: $(".exerciseSelect").val(),
-                classes: $(".classesCompile").val(),
-                methods: $(".methodsCompile").val(),
-                fields: $(".fieldsCompile").val()
+                courseId: $(".coursesSelect").val()
             },
             function (data, status) {
-                $(".classesCompile").val(data[0]);
-                $(".methodsCompile").val(data[1]);
-                $(".fieldsCompile").val(data[2]);
-                $(".resultOutput").val("");
+                userName: $(".userNameTextField").val("");
+                password: $(".passwordTextField").val("");
             });
+    });
+
+    $(".showHideUsers").click(function () {
+        $(".adminUserWrapper").toggle();
+    });
+
+    $(".showHideContent").click(function () {
+        $(".adminContentWrapper").toggle();
     });
 });

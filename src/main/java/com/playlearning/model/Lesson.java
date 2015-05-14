@@ -28,7 +28,7 @@ public class Lesson {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 45)
+    @Column(name = "name", nullable = false, insertable = true, updatable = true)
     public String getName() {
         return name;
     }
@@ -48,7 +48,7 @@ public class Lesson {
     }
 
     @Basic
-    @Column(name = "html", nullable = false, insertable = true, updatable = true, length = 30)
+    @Column(name = "html", nullable = false, insertable = true, updatable = true)
     public String getHtml() {
         return html;
     }

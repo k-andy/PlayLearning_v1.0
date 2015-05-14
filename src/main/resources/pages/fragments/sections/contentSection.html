@@ -6,12 +6,16 @@
 </head>
 <body>
 <section th:fragment="content">
-    <div class="contentsWrapper" style="text-align: left; padding-left: 50px">
+    <div class="contentWrapper">
         <h2>Curse content</h2>
         <div th:each="contentItem : ${content}">
-            <div><span th:text="${contentItem.getNumber()} + '. '"></span><a th:href="@{subChapterSection(number=${contentItem.getNumber() + 1})}" th:text="${contentItem.getName()}"></a></div>
-            <div style="padding-left: 10px" th:each="contentItemSubChapter : ${contentItem.getSubChapters()}">
-                <div><span th:text="${contentItem.getNumber() + '.' + contentItemSubChapter.getNumber() + '. '}"></span><a th:href="@{subChapterSection(number=${contentItem.getNumber() + contentItemSubChapter.getNumber()})}" th:text="${contentItemSubChapter.getName()}"></a></div>
+            <div>
+                <span th:text="${contentItem.key.number + ' ' + contentItem.key.name}"></span>
+            </div>
+            <div th:each="lesson : ${contentItem.value}">
+                <div>
+                    <a th:href="@{lesson.name}"
+                       th:text="${lesson.name}"></a></div>
             </div>
         </div>
     </div>

@@ -26,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/", "/adddata", "/getCategoryNumbers", "/admin", "/adduser", "/css/**", "/js/**").permitAll()
 //                .anyRequest().access("hasRole('ADMIN_ROLE')").and()
 //                .formLogin()
-//                .loginPage("/login").permitAll().failureUrl("/login?error")
+//                .loginPage("/loginSection").permitAll().failureUrl("/login?error")
 //                .usernameParameter("username")
 //                .passwordParameter("password")
 //                .and().logout().logoutSuccessUrl("/login?logout")

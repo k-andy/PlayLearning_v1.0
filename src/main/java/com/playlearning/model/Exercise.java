@@ -51,7 +51,7 @@ public class Exercise {
     }
 
     @Basic
-    @Column(name = "html", nullable = false, insertable = true, updatable = true, length = 30)
+    @Column(name = "html", nullable = false, insertable = true, updatable = true, length = 60)
     public String getHtml() {
         return html;
     }

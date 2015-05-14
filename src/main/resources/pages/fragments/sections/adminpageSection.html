@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Security Example </title>
+</head>
+<body>
+<section th:fragment="content">
+    <div class="adminPageWrapper">
+        <button class="showHideUsers showHideButton adminButton" type="button" title="hide\show users block">users
+        </button>
+        <button class="createFiles showHideButton adminButton" type="button"
+                title="creates files in file system for courses/categories/lessons/exercises">create files
+        </button>
+        <div class="adminUserWrapper adminBlock">
+            <div>
+                <label class="dataLabel">User Name:</label>
+                <input type="text" class="userNameTextField dataTextField"/>
+            </div>
+            <div>
+                <label class="dataLabel">Password:</label>
+                <input type="text" class="passwordTextField dataTextField"/>
+            </div>
+            <div>
+                <label class="dataLabel">e-mail:</label>
+                <input type="text" class="emailTextField dataTextField"/>
+            </div>
+            <div>
+                <label class="dataLabel">Role:</label>
+                <select class="selectRole dataSelect">
+                    <option th:each="role : ${roles}"
+                            th:value="${role.id}"
+                            th:text="${role.name}"></option>
+                </select>
+            </div>
+            <button class="addUser adminButton" type="button">add user</button>
+        </div>
+        <button class="showHideContent showHideButton adminButton" type="button" title="hide\show edit content block">
+            content
+        </button>
+        <div class="adminContentWrapper adminBlock">
+            <div class="coursesDataBlock dataBlock">
+                <label class="dataLabel">Courses:</label>
+                <span class="adminTip">choose first option from drop-down to add new course or choose existing and type a new name for it</span>
+                <select class="coursesSelect dataSelect" title="select course you want to edit">
+                </select>
+                <input class="courseTextField dataTextField" type="text" title="new name for course"/>
+
+                <div class="dataButtons">
+                    <button class="addOrUpdateCourse adminButton" type="button" title="add or update course">add or
+                        update
+                    </button>
+                </div>
+            </div>
+            <div class="categoriesDataBlock dataBlock">
+                <div class="addInfoBlock addInfoBlockSelect">
+                    <label class="dataLabel">Categories:</label>
+                    <span class="adminTip">choose first option from drop-down to add new category or choose existing and type a new name for it</span>
+                    <select class="categoriesSelect dataSelect" title="select category you want to edit">
+                    </select>
+                    <span class="infoLabel"># <span class="categoryNumber"></span></span>
+                    <input class="categoryTextField dataTextField" type="text" title="new name for category"/>
+                    <input class="categoryNumberTextField dataTextField" type="text"
+                           title="enter number of category"/><span class="infoLabel">category number</span>
+                </div>
+                <div class="addInfoBlock">
+                    <textarea rows="10" cols="30" class="categoryTextArea dataTextField"
+                              title="new names for categories, each should be in separate line"/>
+                </div>
+                <div class="dataButtons">
+                    <button class="addOrUpdateCategory adminButton" type="button" title="add or update categories">add
+                        or update
+                    </button>
+                    <span class="adminTip">to add more then one category put them here in separate lines and erase text field on the left</span>
+                </div>
+            </div>
+            <div class="lessonsDataBlock dataBlock">
+                <div class="addInfoBlock addInfoBlockSelect">
+                    <label class="dataLabel">Lessons:</label>
+                    <span class="adminTip">choose first option from drop-down to add new lesson or choose existing and type a new name for it</span>
+                    <select class="lessonsSelect dataSelect" title="select lesson you want to edit">
+                    </select>
+                    <span class="infoLabel"># <span class="lessonNumber"></span></span>
+                    <input class="lessonTextField dataTextField" type="text" title="new names for lesson"/>
+                    <input class="lessonNumberTextField dataTextField" type="text" title="enter number of lesson"/><span
+                        class="infoLabel">lesson number</span>
+                </div>
+                <div class="addInfoBlock">
+                    <textarea rows="10" cols="30" class="lessonTextArea dataTextField"
+                              title="new names for lessons, each should be in separate line"/>
+                </div>
+                <div class="dataButtons">
+                    <button class="addOrUpdateLesson adminButton" type="button" title="add or update lesson">add or
+                        update
+                    </button>
+                    <span class="adminTip">to add more then one lesson put them here in separate lines and erase text field on the left</span>
+                </div>
+            </div>
+            <div class="exercisesDataBlock dataBlock">
+                <label class="dataLabel">Exercises:</label>
+                <select class="exerciseSelect dataSelect" title="select exercise you want to edit">
+                </select>
+
+                <div class="dataButtons">
+                    <button class="addExercise adminButton" type="button" title="add a new exercise">add exercise
+                    </button>
+                </div>
+            </div>
+            <div class="resultsDataBlock dataBlock">
+                <label class="dataLabel">Type of exercise result:</label>
+
+                <div class="resultRadioButton">
+                    <input type="radio" name="resultType" class="radioOutput radioButton" value="output"/>output
+                </div>
+                <div class="resultRadioButton">
+                    <input type="radio" name="resultType" class="radioCompile radioButton" value="compile"/>compile
+                </div>
+
+                <div class="resultOutputWrapper resultBlock">
+                    <label class="dataLabel">Output:</label>
+                    <textarea rows="5" cols="35" class="resultOutput dataTextField"
+                              title="what exercise output should be"/>
+
+                    <div class="dataButtons">
+                        <button class="addOrUpdateResultOutput adminButton" type="button"
+                                title="add or update result output">add or update
+                        </button>
+                    </div>
+                </div>
+                <div class="resultCompileWrapper resultBlock">
+                    <label class="dataLabel">Classes:</label>
+                    <input class="classesCompile resultTextField dataTextField" title="Separate classes by ';'"
+                           type="text"/>
+                    <label class="dataLabel">Methods:</label>
+                    <input class="methodsCompile resultTextField dataTextField" title="Separate methods by ';'"
+                           type="text"/>
+                    <label class="dataLabel">Fields:</label>
+                    <input class="fieldsCompile resultTextField dataTextField" title="Separate fields by ';'"
+                           type="text"/>
+
+                    <div class="dataButtons">
+                        <button class="addOrUpdateResultCompile adminButton" type="button">add or update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
