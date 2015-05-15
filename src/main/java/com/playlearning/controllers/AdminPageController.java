@@ -2,6 +2,7 @@ package com.playlearning.controllers;
 
 import com.playlearning.dao.*;
 import com.playlearning.model.*;
+import com.playlearning.utils.DataAccessUtils;
 import com.playlearning.utils.FileWriteUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,25 +24,7 @@ import java.util.List;
 @Controller
 public class AdminPageController {
     @Autowired
-    private RolesDao rolesDao;
-    @Autowired
-    private UsersDao usersDao;
-    @Autowired
-    private CoursesDao coursesDao;
-    @Autowired
-    private CategoriesDao categoriesDao;
-    @Autowired
-    private LessonsDao lessonsDao;
-    @Autowired
-    private ExerciseDao exerciseDao;
-    @Autowired
-    private ResultsDao resultsDao;
-    @Autowired
-    private ClasZesDao clasZesDao;
-    @Autowired
-    private MethodsDao methodsDao;
-    @Autowired
-    private FieldsDao fieldsDao;
+    private DataAccessUtils dataAccessUtils;
 
     private static final String RESULT_TYPE_OUTPUT = "output";
     private static final String RESULT_TYPE_COMPILE = "compile";
@@ -58,11 +41,12 @@ public class AdminPageController {
     private static final String SPACE_REPLACEMENT = "_";
     private static final String HTML_FILE_NAME_REPLACE_PATTERN = "[^a-zA-Z0-9]+";
 
-    @RequestMapping("/adminpage")
-    public String getAdmin(Model model) {
-        model.addAttribute("roles", rolesDao.getAllRoles());
+    @RequestMapping("/admin")
+    public String admin(Model model) {
+        model.addAttribute("roles", dataAccessUtils.getAllRoles());
+        model.addAttribute("coursesCategories", dataAccessUtils.getCourseCategoryListMap());
         model.addAttribute("view", "fragments/sections/adminpageSection");
-        return "default";
+        return "admin";
     }
 
     @RequestMapping("/addUser")
@@ -73,24 +57,24 @@ public class AdminPageController {
         User user = new User();
         user.setPassword(encoder.encode(password));
         user.setName(userName);
-        user.setRolesByRoleId(rolesDao.getRoleById(roleId));
+        user.setRolesByRoleId(dataAccessUtils.getRoleById(roleId));
         user.setEmail(email.isEmpty() ? DEFAULT_EMAIL : email);
 
-        usersDao.addUser(user);
+        dataAccessUtils.addUser(user);
         return "";
     }
 
     @RequestMapping("/createFiles")
     @ResponseBody
     public String createFiles(@ModelAttribute(value = "courseId") int courseId) {
-        List<Course> allCourses = coursesDao.getAllCourses();
+        List<Course> allCourses = dataAccessUtils.getAllCourses();
 
         if (allCourses != null) {
             for (Course course : allCourses) {
-                List<Category> allCategoriesForCourse = categoriesDao.getAllCategoriesForCourse(course);
+                List<Category> allCategoriesForCourse = dataAccessUtils.getAllCategoriesForCourse(course);
                 if (allCategoriesForCourse != null) {
                     for (Category category : allCategoriesForCourse) {
-                        List<Lesson> allLessonsForCategory = lessonsDao.getAllLessonsForCategory(category);
+                        List<Lesson> allLessonsForCategory = dataAccessUtils.getAllLessonsForCategory(category);
                         if (allLessonsForCategory != null) {
                             for (Lesson lesson : allLessonsForCategory) {
                                 String lessonDirPath = System.getProperty("user.dir") + File.separator + PROJECT_CONTENT_DIRECTORY +
@@ -107,7 +91,7 @@ public class AdminPageController {
                                 file = new File(lessonDirPath, lesson.getHtml() + PAGE_EXTENSION);
                                 FileWriteUtils.createHtmlFile(file);
                                 FileWriteUtils.writeHtmlFile(FileWriteUtils.createHtmlContent(LESSON_CONTENT_TYPE, lesson.getName()), file.getPath());
-                                List<Exercise> allExercisesForLesson = exerciseDao.getAllExercisesForLesson(lesson);
+                                List<Exercise> allExercisesForLesson = dataAccessUtils.getAllExercisesForLesson(lesson);
                                 if (allExercisesForLesson != null) {
                                     for (Exercise exercise : allExercisesForLesson) {
                                         file = new File(exerciseDirPath, exercise.getHtml() + PAGE_EXTENSION);
@@ -134,7 +118,7 @@ public class AdminPageController {
     public String getAllCoursesAsHtmlOptions() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        List<Course> allCourses = coursesDao.getAllCourses();
+        List<Course> allCourses = dataAccessUtils.getAllCourses();
         if (allCourses == null || allCourses.isEmpty()) {
             return "";
         }
@@ -151,7 +135,7 @@ public class AdminPageController {
     public String getCategoryNumbers(@ModelAttribute(value = "courseId") int courseId) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        List<Category> allCategoriesForCourse = categoriesDao.getAllCategoriesForCourse(coursesDao.getCourseById(courseId));
+        List<Category> allCategoriesForCourse = dataAccessUtils.getAllCategoriesForCourse(dataAccessUtils.getCourseById(courseId));
         if (allCategoriesForCourse != null) {
             stringBuilder.append("<option value=\"-1\">select category</option>");
             for (Category category : allCategoriesForCourse) {
@@ -169,9 +153,9 @@ public class AdminPageController {
         StringBuilder stringBuilder = new StringBuilder();
         List<String> result = new LinkedList<String>();
 
-        Category category = categoriesDao.getCategoryById(categoryId);
+        Category category = dataAccessUtils.getCategoryById(categoryId);
         result.add(category.getNumber() + "");
-        List<Lesson> allLessonsForCategory = lessonsDao.getAllLessonsForCategory(category);
+        List<Lesson> allLessonsForCategory = dataAccessUtils.getAllLessonsForCategory(category);
         if (allLessonsForCategory != null) {
             stringBuilder.append("<option value=\"-1\">select lesson</option>");
             for (Lesson lesson : allLessonsForCategory) {
@@ -190,9 +174,9 @@ public class AdminPageController {
         StringBuilder stringBuilder = new StringBuilder();
         List<String> result = new LinkedList<String>();
 
-        Lesson lesson = lessonsDao.getLessonById(lessonId);
+        Lesson lesson = dataAccessUtils.getLessonById(lessonId);
         result.add(lesson.getNumber() + "");
-        List<Exercise> allExercisesForLesson = exerciseDao.getAllExercisesForLesson(lesson);
+        List<Exercise> allExercisesForLesson = dataAccessUtils.getAllExercisesForLesson(lesson);
         if (allExercisesForLesson != null) {
             stringBuilder.append("<option value=\"-1\">select exercise</option>");
             for (Exercise exercise : allExercisesForLesson) {
@@ -209,25 +193,25 @@ public class AdminPageController {
     @ResponseBody
     public List<String> getResultsForExercise(@ModelAttribute(value = "exerciseId") int exerciseId) {
         List<String> result = new LinkedList<String>();
-        Exercise exercise = exerciseDao.getExerciseById(exerciseId);
+        Exercise exercise = dataAccessUtils.getExerciseById(exerciseId);
 
         result.add(exercise.getType());
 
         if (exercise.getType().equals(RESULT_TYPE_OUTPUT)) {
-            result.add(resultsDao.getResultForExercise(exercise) == null ? "" : resultsDao.getResultForExercise(exercise).getOutput());
+            result.add(dataAccessUtils.getResultForExercise(exercise) == null ? "" : dataAccessUtils.getResultForExercise(exercise).getOutput());
         } else {
             String classes = "";
             String methods = "";
             String fields = "";
-            ClasZ clasZ = clasZesDao.getClasZForExercise(exercise);
+            ClasZ clasZ = dataAccessUtils.getClasZForExercise(exercise);
             if (clasZ != null) {
                 classes += clasZ.getNames();
             }
-            Method method = methodsDao.getMethodForExercise(exercise);
+            Method method = dataAccessUtils.getMethodForExercise(exercise);
             if (method != null) {
                 methods += method.getNames();
             }
-            Field field = fieldsDao.getFieldForExercise(exercise);
+            Field field = dataAccessUtils.getFieldForExercise(exercise);
             if (field != null) {
                 fields += field.getNames();
             }
@@ -244,13 +228,13 @@ public class AdminPageController {
     public String addOrUpdateCourse(@ModelAttribute(value = "courseId") int courseId, @ModelAttribute(value = "courseName") String courseName) {
         Course course;
         if (courseId != -1) {
-            course = coursesDao.getCourseById(courseId);
+            course = dataAccessUtils.getCourseById(courseId);
         } else {
             course = new Course();
         }
 
         course.setName(courseName);
-        coursesDao.addCourse(course);
+        dataAccessUtils.addCourse(course);
 
         return getAllCoursesAsHtmlOptions(course.getId());
     }
@@ -258,7 +242,7 @@ public class AdminPageController {
     public String getAllCoursesAsHtmlOptions(int courseId) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        List<Course> allCourses = coursesDao.getAllCourses();
+        List<Course> allCourses = dataAccessUtils.getAllCourses();
         stringBuilder.append("<option value=\"-1\">select course</option>");
         for (Course course : allCourses) {
             if (course.getId() == courseId) {
@@ -276,33 +260,33 @@ public class AdminPageController {
                                       @ModelAttribute(value = "categoryName") String categoryName, @ModelAttribute(value = "categoryNumber") int categoryNumber,
                                       @ModelAttribute(value = "categoryNames") String categoryNames) {
         Category category = new Category();
-        Course course = coursesDao.getCourseById(courseId);
+        Course course = dataAccessUtils.getCourseById(courseId);
         if (categoryNames.isEmpty()) {
             if (categoryId != -1) {
-                category = categoriesDao.getCategoryById(categoryId);
+                category = dataAccessUtils.getCategoryById(categoryId);
             } else {
                 category = new Category();
             }
             if (categoryNumber != 0) {
-                List<Category> allCategoriesForCourse = categoriesDao.getAllCategoriesForCourse(course);
+                List<Category> allCategoriesForCourse = dataAccessUtils.getAllCategoriesForCourse(course);
                 if (allCategoriesForCourse != null) {
                     for (Category tmpCategory : allCategoriesForCourse) {
                         if (tmpCategory.getNumber() >= categoryNumber) {
                             tmpCategory.setNumber(tmpCategory.getNumber() + 1);
-                            categoriesDao.addCategory(tmpCategory);
+                            dataAccessUtils.addCategory(tmpCategory);
                         }
                     }
                 }
                 category.setNumber(categoryNumber);
             } else {
-                category.setNumber(categoriesDao.getLastCategoryNumber(course) + 1);
+                category.setNumber(dataAccessUtils.getLastCategoryNumber(course) + 1);
             }
             addCategory(category, course, categoryName);
         } else {
             String[] categoryNameList = categoryNames.split("\\n");
             for (String categoryNameFromList : categoryNameList) {
                 category = new Category();
-                category.setNumber(categoriesDao.getLastCategoryNumber(course) + 1);
+                category.setNumber(dataAccessUtils.getLastCategoryNumber(course) + 1);
                 addCategory(category, course, categoryNameFromList);
             }
         }
@@ -313,13 +297,13 @@ public class AdminPageController {
     private void addCategory(Category category, Course course, String categoryNameFromList) {
         category.setName(categoryNameFromList);
         category.setCoursesByCourseId(course);
-        categoriesDao.addCategory(category);
+        dataAccessUtils.addCategory(category);
     }
 
     public String getAllCategoriesAsHtmlOptions(Course course, int categoryId) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        List<Category> allCategoriesForCourse = categoriesDao.getAllCategoriesForCourse(course);
+        List<Category> allCategoriesForCourse = dataAccessUtils.getAllCategoriesForCourse(course);
         stringBuilder.append("<option value=\"-1\">select category</option>");
         for (Category category : allCategoriesForCourse) {
             if (category.getId() == categoryId) {
@@ -337,26 +321,26 @@ public class AdminPageController {
                                     @ModelAttribute(value = "lessonName") String lessonName, @ModelAttribute(value = "lessonNumber") int lessonNumber,
                                     @ModelAttribute(value = "lessonNames") String lessonNames) {
         Lesson lesson = new Lesson();
-        Category category = categoriesDao.getCategoryById(categoryId);
+        Category category = dataAccessUtils.getCategoryById(categoryId);
         if (lessonNames.isEmpty()) {
             if (lessonId != -1) {
-                lesson = lessonsDao.getLessonById(lessonId);
+                lesson = dataAccessUtils.getLessonById(lessonId);
             } else {
                 lesson = new Lesson();
             }
             if (lessonNumber != 0) {
-                List<Lesson> allLessonsForCategory = lessonsDao.getAllLessonsForCategory(category);
+                List<Lesson> allLessonsForCategory = dataAccessUtils.getAllLessonsForCategory(category);
                 if (allLessonsForCategory != null) {
                     for (Lesson tmpLesson : allLessonsForCategory) {
                         if (tmpLesson.getNumber() >= lessonNumber) {
                             tmpLesson.setNumber(tmpLesson.getNumber() + 1);
-                            lessonsDao.addLesson(tmpLesson);
+                            dataAccessUtils.addLesson(tmpLesson);
                         }
                     }
                 }
                 lesson.setNumber(lessonNumber);
             } else {
-                lesson.setNumber(lessonsDao.getLastLessonNumber(category) + 1);
+                lesson.setNumber(dataAccessUtils.getLastLessonNumber(category) + 1);
             }
             addLesson(lessonName, lesson, category);
         } else {
@@ -374,13 +358,13 @@ public class AdminPageController {
         lesson.setName(lessonName);
         lesson.setHtml(lessonName.replaceAll(HTML_FILE_NAME_REPLACE_PATTERN, SPACE_REPLACEMENT));
         lesson.setCategoriesByCategoryId(category);
-        lessonsDao.addLesson(lesson);
+        dataAccessUtils.addLesson(lesson);
     }
 
     public String getAllLessonsAsHtmlOptions(Category category, int lessonId) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        List<Lesson> allLessonsForCategory = lessonsDao.getAllLessonsForCategory(category);
+        List<Lesson> allLessonsForCategory = dataAccessUtils.getAllLessonsForCategory(category);
         stringBuilder.append("<option value=\"-1\">select lesson</option>");
         for (Lesson lesson : allLessonsForCategory) {
             if (lesson.getId() == lessonId) {
@@ -395,15 +379,15 @@ public class AdminPageController {
     @RequestMapping("/addExercise")
     @ResponseBody
     public String addExercise(@ModelAttribute(value = "lessonId") int lessonId) {
-        Lesson lesson = lessonsDao.getLessonById(lessonId);
+        Lesson lesson = dataAccessUtils.getLessonById(lessonId);
         Exercise exercise = new Exercise();
 
         exercise.setType(RESULT_TYPE_OUTPUT);
         exercise.setLessonsByLessonId(lesson);
-        exercise.setNumber(exerciseDao.getLastExerciseNumber(lesson) + 1);
+        exercise.setNumber(dataAccessUtils.getLastExerciseNumber(lesson) + 1);
         exercise.setHtml(lesson.getHtml() + SPACE_REPLACEMENT + exercise.getNumber());
 
-        exerciseDao.addExercise(exercise);
+        dataAccessUtils.addExercise(exercise);
 
         return getAllExercisesAsHtmlOptions(lesson, exercise.getId());
     }
@@ -411,7 +395,7 @@ public class AdminPageController {
     public String getAllExercisesAsHtmlOptions(Lesson lesson, int exerciseId) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        List<Exercise> allExercisesForLesson = exerciseDao.getAllExercisesForLesson(lesson);
+        List<Exercise> allExercisesForLesson = dataAccessUtils.getAllExercisesForLesson(lesson);
         stringBuilder.append("<option value=\"-1\">select exercise</option>");
         for (Exercise exercise : allExercisesForLesson) {
             if (exercise.getId() == exerciseId) {
@@ -427,28 +411,28 @@ public class AdminPageController {
     @ResponseBody
     public String addOrUpdateResultOutput(@ModelAttribute(value = "exerciseId") int exerciseId, @ModelAttribute(value = "resultType") String resultType,
                                           @ModelAttribute(value = "output") String output) {
-        Exercise exercise = exerciseDao.getExerciseById(exerciseId);
-        Result result = resultsDao.getResultForExercise(exercise) == null ? new Result() : resultsDao.getResultForExercise(exercise);
+        Exercise exercise = dataAccessUtils.getExerciseById(exerciseId);
+        Result result = dataAccessUtils.getResultForExercise(exercise) == null ? new Result() : dataAccessUtils.getResultForExercise(exercise);
 
         result.setExercisesByExerciseId(exercise);
         result.setOutput(output);
 
         exercise.setType(RESULT_TYPE_OUTPUT);
-        exerciseDao.addExercise(exercise);
-        resultsDao.addResult(result);
+        dataAccessUtils.addExercise(exercise);
+        dataAccessUtils.addResult(result);
 
-        ClasZ clasZForExercise = clasZesDao.getClasZForExercise(exercise);
-        Method methodForExercise = methodsDao.getMethodForExercise(exercise);
-        Field fieldForExercise = fieldsDao.getFieldForExercise(exercise);
+        ClasZ clasZForExercise = dataAccessUtils.getClasZForExercise(exercise);
+        Method methodForExercise = dataAccessUtils.getMethodForExercise(exercise);
+        Field fieldForExercise = dataAccessUtils.getFieldForExercise(exercise);
 
         if (clasZForExercise != null) {
-            clasZesDao.deleteClasZ(clasZForExercise);
+            dataAccessUtils.deleteClasZ(clasZForExercise);
         }
         if (methodForExercise != null) {
-            methodsDao.deleteMethod(methodForExercise);
+            dataAccessUtils.deleteMethod(methodForExercise);
         }
         if (fieldForExercise != null) {
-            fieldsDao.deleteField(fieldForExercise);
+            dataAccessUtils.deleteField(fieldForExercise);
         }
 
         return result.getOutput();
@@ -461,29 +445,29 @@ public class AdminPageController {
                                                  @ModelAttribute(value = "fields") String fields) {
         List<String> data = new LinkedList<String>();
 
-        Exercise exercise = exerciseDao.getExerciseById(exerciseId);
-        ClasZ clasZ = clasZesDao.getClasZForExercise(exercise) == null ? new ClasZ() : clasZesDao.getClasZForExercise(exercise);
-        Method method = methodsDao.getMethodForExercise(exercise) == null ? new Method() : methodsDao.getMethodForExercise(exercise);
-        Field field = fieldsDao.getFieldForExercise(exercise) == null ? new Field() : fieldsDao.getFieldForExercise(exercise);
+        Exercise exercise = dataAccessUtils.getExerciseById(exerciseId);
+        ClasZ clasZ = dataAccessUtils.getClasZForExercise(exercise) == null ? new ClasZ() : dataAccessUtils.getClasZForExercise(exercise);
+        Method method = dataAccessUtils.getMethodForExercise(exercise) == null ? new Method() : dataAccessUtils.getMethodForExercise(exercise);
+        Field field = dataAccessUtils.getFieldForExercise(exercise) == null ? new Field() : dataAccessUtils.getFieldForExercise(exercise);
 
         clasZ.setExercisesByExerciseId(exercise);
         clasZ.setNames(classes);
-        clasZesDao.addClasZ(clasZ);
+        dataAccessUtils.addClasZ(clasZ);
 
         method.setExercisesByExerciseId(exercise);
         method.setNames(methods);
-        methodsDao.addClasZ(method);
+        dataAccessUtils.addMethod(method);
 
         field.setExercisesByExerciseId(exercise);
         field.setNames(fields);
-        fieldsDao.addField(field);
+        dataAccessUtils.addField(field);
 
         exercise.setType(RESULT_TYPE_COMPILE);
-        exerciseDao.addExercise(exercise);
+        dataAccessUtils.addExercise(exercise);
 
-        Result resultForExercise = resultsDao.getResultForExercise(exercise);
+        Result resultForExercise = dataAccessUtils.getResultForExercise(exercise);
         if (resultForExercise != null) {
-            resultsDao.deleteResult(resultForExercise);
+            dataAccessUtils.deleteResult(resultForExercise);
         }
 
         data.add(clasZ.getNames());

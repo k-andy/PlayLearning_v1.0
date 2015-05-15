@@ -88,12 +88,12 @@ public class FileWriteUtils {
         stringBuilder.append("<title>" + contentName + "</title>\n");
         stringBuilder.append("</head>\n");
         stringBuilder.append("<body>\n");
-        stringBuilder.append("<article th:fragment=\"content\">\n");
+        stringBuilder.append("<article th:fragment=\"lesson\">\n");
         stringBuilder.append("<div class=\"" + contentType + "Wrapper\">\n");
         stringBuilder.append("<div class=\"" + contentType + "HeaderWrapper\">\n");
-        stringBuilder.append("<h2>\n");
+        stringBuilder.append("<h3>\n");
         stringBuilder.append(contentName);
-        stringBuilder.append("</h2>\n");
+        stringBuilder.append("</h3>\n");
         stringBuilder.append("</div>\n");
         stringBuilder.append("<div class=\"" + contentType + "ContentWrapper\">\n");
         stringBuilder.append("content goes here\n");

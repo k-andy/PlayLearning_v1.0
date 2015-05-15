@@ -54,7 +54,7 @@ public class Course {
         return result;
     }
 
-    @OneToMany(mappedBy = "coursesByCourseId")
+    @OneToMany(mappedBy = "coursesByCourseId", fetch = FetchType.EAGER)
     public Collection<Category> getCategoriesById() {
         return categoriesById;
     }

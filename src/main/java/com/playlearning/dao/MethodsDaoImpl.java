@@ -19,7 +19,7 @@ public class MethodsDaoImpl implements MethodsDao {
     private SessionFactory sessionFactory;
 
     @Override
-    public void addClasZ(Method method) {
+    public void addMethod(Method method) {
         sessionFactory.getCurrentSession().saveOrUpdate(method);
     }
 

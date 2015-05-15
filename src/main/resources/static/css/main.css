@@ -3,133 +3,70 @@ body {
     color: white;
 }
 
-.adminPageWrapper {
-    margin-bottom: 10px;
-    float: left;
-    margin-top: 10px;
-    width: 100%;
-}
-
-.adminPageWrapper .adminBlock {
-    float: left;
-    border-top: 1px solid;
-    width: 100%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid;
-    border-color: white;
-}
-
-.adminPageWrapper .dataBlock {
-    float: left;
-    clear: both;
-    width: 100%;
-    padding-bottom: 5px;
-}
-
-.adminPageWrapper .resultBlock {
-    display: block;
-    float: left;
-    clear: left;
-    padding: 7px;
-}
-
-.adminPageWrapper .dataLabel {
-    float: left;
-    width: 100%;
-    padding-top: 5px;
-    padding-bottom: 2px;
-}
-
-.adminPageWrapper .dataSelect {
-    float: left;
-    margin-right: 10px;
-}
-
-.adminPageWrapper .dataTextField {
-    float: left;
-    width: 250px;
-    margin-right: 10px;
-}
-
-.adminPageWrapper .dataButtons {
-    float: left;
-}
-
-.adminPageWrapper .resultsDataBlock {
-    padding-left: 10px;
-}
-
-.adminPageWrapper .resultRadioButton {
-    float: left;
-    clear: both;
-    padding-left: 5px;
-}
-
-.adminPageWrapper .resultTextField {
-    width: 250px;
-    margin-bottom: 5px;
-}
-
-.adminPageWrapper .radioButton {
-    margin-right: 5px;
-}
-
-.adminPageWrapper .showHideButton {
-    float: left;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    clear: both;
-}
-
-.adminPageWrapper .showHideUsers {
-    clear: left;
-}
-
-.adminPageWrapper .createFiles {
-    clear: right;
-    margin-left: 20px;
-}
-
-.adminPageWrapper .emptyField {
-    border: 3px #75a3d1;
-}
-
-.adminPageWrapper .addInfoBlock {
-    float: left;
-}
-
-.adminPageWrapper .categoriesSelect, .adminPageWrapper .lessonsSelect {
-    margin-bottom: 10px;
-}
-
-.adminPageWrapper .categoryTextField, .adminPageWrapper .lessonTextField {
-    clear: left;
-}
-
-.adminPageWrapper .adminButton {
-}
-
-.adminPageWrapper .addInfoBlockSelect {
-    width: 465px;
-}
-
-.adminPageWrapper .adminTip {
-    float: left;
-    clear: both;
-    font-size: 12px;
-    padding-bottom: 5px;
-    width: 100%;
-}
-
-.adminPageWrapper .categoryNumberTextField, .adminPageWrapper .lessonNumberTextField {
-    width: 20px;
-}
-
-.adminPageWrapper .infoLabel {
-    float: left;
-}
-
 a, a:active, a:visited {
     color: #d9411e;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #75a3d1;
+}
+
+.contentWrapper {
+    padding: 20px 0;
+}
+
+.courseWrapper .categoryWrapper {
+    padding: 0;
+}
+
+.headerWrapper .courseLinks ul {
+    padding: 0;
+    list-style: none;
+}
+
+.headerWrapper .courseLinks ul li {
+    width: 100px;
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    line-height: 21px;
+}
+
+.headerWrapper .courseLinks ul li a {
+    width: 100px;
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.headerWrapper .courseLinks ul li ul {
+    display: none;
+    position: absolute;
+    z-index: 999;
+    left: 0;
+}
+
+.headerWrapper .courseLinks ul li:hover ul {
+    display: block;
+}
+
+.headerWrapper .courseLinks ul li ul li,
+.headerWrapper .courseLinks ul li ul li a {
+    width: 285px;
+    background: #f2f2f2;
+}
+
+.headerWrapper .courseLinks ul li ul li a:hover {
+    color: #fff;
+    background: #939393;
+}
+
+.headerWrapper {
+    border-bottom: 1px solid;
+}
+
+.footerWrapper {
+    padding: 20px 0;
+    border-top: 1px solid;
 }

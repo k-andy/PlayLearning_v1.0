@@ -1,0 +1,127 @@
+
+.adminPageWrapper {
+    margin-bottom: 10px;
+    float: left;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.adminPageWrapper .adminBlock {
+    float: left;
+    border-top: 1px solid;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid;
+    border-color: white;
+}
+
+.adminPageWrapper .dataBlock {
+    float: left;
+    clear: both;
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+.adminPageWrapper .resultBlock {
+    display: block;
+    float: left;
+    clear: left;
+    padding: 7px;
+}
+
+.adminPageWrapper .dataLabel {
+    float: left;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 2px;
+}
+
+.adminPageWrapper .dataSelect {
+    float: left;
+    margin-right: 10px;
+}
+
+.adminPageWrapper .dataTextField {
+    float: left;
+    width: 250px;
+    margin-right: 10px;
+}
+
+.adminPageWrapper .dataButtons {
+    float: left;
+}
+
+.adminPageWrapper .resultsDataBlock {
+    padding-left: 10px;
+}
+
+.adminPageWrapper .resultRadioButton {
+    float: left;
+    clear: both;
+    padding-left: 5px;
+}
+
+.adminPageWrapper .resultTextField {
+    width: 250px;
+    margin-bottom: 5px;
+}
+
+.adminPageWrapper .radioButton {
+    margin-right: 5px;
+}
+
+.adminPageWrapper .showHideButton {
+    float: left;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    clear: both;
+}
+
+.adminPageWrapper .showHideUsers {
+    clear: left;
+}
+
+.adminPageWrapper .createFiles {
+    clear: right;
+    margin-left: 20px;
+}
+
+.adminPageWrapper .emptyField {
+    border: 3px #75a3d1;
+}
+
+.adminPageWrapper .addInfoBlock {
+    float: left;
+}
+
+.adminPageWrapper .categoriesSelect, .adminPageWrapper .lessonsSelect {
+    margin-bottom: 10px;
+}
+
+.adminPageWrapper .categoryTextField, .adminPageWrapper .lessonTextField {
+    clear: left;
+}
+
+.adminPageWrapper .adminButton {
+}
+
+.adminPageWrapper .addInfoBlockSelect {
+    width: 465px;
+}
+
+.adminPageWrapper .adminTip {
+    float: left;
+    clear: both;
+    font-size: 12px;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+.adminPageWrapper .categoryNumberTextField, .adminPageWrapper .lessonNumberTextField {
+    width: 20px;
+}
+
+.adminPageWrapper .infoLabel {
+    float: left;
+}

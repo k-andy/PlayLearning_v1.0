@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head lang="en">
+        <meta charset="UTF-8"/>
+        <title></title>
+    </head>
+    <body>
+        <section class="contentWrapper courseWrapper" th:fragment="course">
+            <h3 th:text="${course.name}"></h3>
+
+            <div th:each="category : ${course.categoriesById}">
+                <div th:replace="fragments/sections/categorySection :: category (category=${category})"></div>
+            </div>
+        </section>
+    </body>
+</html>
