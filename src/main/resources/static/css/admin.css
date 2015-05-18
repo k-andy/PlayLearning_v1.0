@@ -124,4 +124,41 @@
 
 .adminPageWrapper .infoLabel {
     float: left;
+    padding-bottom: 10px;
+}
+
+.adminPageWrapper .nickLabel {
+    float: left;
+    clear: left;
+    padding-right: 5px;
+}
+
+.adminPageWrapper .htmlEditorTextArea {
+    float: left;
+    background-color: white;
+    width: 80%;
+    color: black;
+    height: 400px;
+}
+
+.adminPageWrapper .htmlEditButtons {
+    float: right;
+    width: 200px;
+}
+
+.adminPageWrapper .htmlEditButtons button {
+    float: left;
+}
+
+.adminPageWrapper .htmlResult {
+    float: left;
+    border: 1px solid white;
+    width: 80%;
+    height: 400px;
+    margin: 10px 0;
+}
+.adminPageWrapper .addLessonHtmlButton {
+    float: left;
+    clear: both;
+    margin: 10px 0;
 }

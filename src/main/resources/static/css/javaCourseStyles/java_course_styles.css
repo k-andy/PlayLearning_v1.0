@@ -1,0 +1,57 @@
+.javaLessonWrapper .lessonHeaderWrapper {
+    font-size: 20px;
+    font-weight: bold;
+    clear: both;
+    text-align: center;
+}
+
+.javaLessonWrapper .lessonTextWrapper {
+    float: left;
+    clear: both;
+    padding: 10px;
+    color: #e78f08;
+}
+
+.javaLessonWrapper .orderedListWrapper {
+    float: left;
+    padding: 10px;
+    color: #1c94c4;
+}
+
+.javaLessonWrapper .unorderedListWrapper {
+    float: left;
+    clear: both;
+    padding: 10px;
+    color: #d9411e;
+}
+
+.javaLessonWrapper .boldText {
+    font-weight: bold;
+}
+
+.javaLessonWrapper .italicTextWrapper {
+    font-style: italic;
+}
+
+.javaLessonWrapper .underlinedTextWrapper {
+    text-decoration: underline;
+}
+
+.javaLessonWrapper .codeSnippetWrapper {
+    font-family: monospace;
+    float: left;
+    clear: both;
+}
+
+.javaLessonWrapper .paragraphWrapper {
+    float: left;
+    clear: both;
+    color: #ffe45c;
+}
+
+.javaLessonWrapper .imageWrapper {
+    float: left;
+    clear: both;
+    padding: 20px;
+    color: #1c94c4;
+}

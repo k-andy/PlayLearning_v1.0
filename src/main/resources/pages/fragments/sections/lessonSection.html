@@ -1,13 +1,18 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8"/>
-    </head>
-    <body>
-        <section th:fragment="lesson">
-            <div class="contentWrapper lessonsWrapper">
-                <div th:replace="${html} :: lesson"></div>
-            </div>
-        </section>
-    </body>
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<section class="contentWrapper lessonsWrapper javaLessonWrapper" th:fragment="lesson">
+    <button class="lessonButton showLesson">show lesson</button>
+    <div class="lessonContainer">
+        <div th:replace="${html} :: lesson"></div>
+    </div>
+    <button class="lessonButton showExercise">show exercise</button>
+    <div class="exerciseContainer">
+        <div th:replace="${html} :: lesson"></div>
+    </div>
+</section>
+</body>
 </html>

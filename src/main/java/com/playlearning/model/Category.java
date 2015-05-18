@@ -11,6 +11,7 @@ import java.util.Collection;
 public class Category {
     private int id;
     private int number;
+    private String nick;
     private String name;
     private Course coursesByCourseId;
     private Collection<Lesson> lessonsesById;
@@ -24,6 +25,16 @@ public class Category {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "nick", nullable = false, insertable = true, updatable = true, length = 30)
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     @Basic

@@ -1,31 +1,56 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-    </head>
-    <body>
-        <header class="headerWrapper" th:fragment="header">
-            <a href="/" th:href="@{/}"
-               th:text="Home"></a>
-            <span>some header</span>
+<head>
+</head>
+<body>
+<header class="headerWrapper" th:fragment="header">
+    <a href="/" th:href="@{/}"
+       th:text="Home"></a>
+    <span>some header</span>
 
-            <div class="courseLinks">
+    <div class="courseLinks">
+        <ul>
+            <li th:each="coursesCategoriesEntry : ${coursesCategories}">
+                <a href="#" th:href="@{/course/{courseNick}(courseNick=${coursesCategoriesEntry.key.nick},
+                        courseId=${coursesCategoriesEntry.key.id})}"
+                   th:text="${coursesCategoriesEntry.key.name} + ' &#9662;'"></a>
                 <ul>
-                    <li th:each="coursesCategoriesEntry : ${coursesCategories}">
-                        <a href="#" th:href="@{/course(courseId=${coursesCategoriesEntry.key.id})}"
-                           th:text="${coursesCategoriesEntry.key.name} + ' &#9662;'"></a>
-                        <ul>
-                            <li th:each="categoryEntry : ${coursesCategoriesEntry.value}">
-                                <a href="#" th:href="@{/course/category(categoryId=${categoryEntry.id})}"
-                                   th:text="${categoryEntry.name}"></a>
-                            </li>
-                            <li>
-                                <a href="#" th:href="@{/course(courseId=${coursesCategoriesEntry.key.id})}"
-                                   th:text="more..."></a>
-                            </li>
-                        </ul>
+                    <li th:each="categoryEntry : ${coursesCategoriesEntry.value}">
+                        <a href="#" th:href="@{/course/{courseNick}/category/{categoryNick}(courseNick=${coursesCategoriesEntry.key.nick},
+                                categoryNick=${categoryEntry.nick},categoryId=${categoryEntry.id})}"
+                           th:text="${categoryEntry.name}"></a>
+                    </li>
+                    <li>
+                        <a href="#" th:href="@{/course/{courseNick}(courseNick=${coursesCategoriesEntry.key.nick},
+                        courseId=${coursesCategoriesEntry.key.id})}"
+                           th:text="more..."></a>
                     </li>
                 </ul>
-            </div>
-        </header>
-    </body>
+            </li>
+        </ul>
+    </div>
+
+    <!--<div class="courseLinks">-->
+    <!--<ul>-->
+    <!--<li th:each="coursesCategoriesEntry : ${coursesCategories}">-->
+    <!--<a href="#" th:href="@{/{courseNick}(courseNick=${coursesCategoriesEntry.key.nick},-->
+    <!--courseId=${coursesCategoriesEntry.key.id})}"-->
+    <!--th:text="${coursesCategoriesEntry.key.name} + ' &#9662;'"></a>-->
+    <!--<ul>-->
+    <!--<li th:each="categoryEntry : ${coursesCategoriesEntry.value}">-->
+    <!--<a href="#" th:href="@{/{courseNick}/{categoryNick}(courseNick=${coursesCategoriesEntry.key.nick},-->
+    <!--categoryNick=${categoryEntry.nick},categoryId=${categoryEntry.id})}"-->
+    <!--th:text="${categoryEntry.name}"></a>-->
+    <!--</li>-->
+    <!--<li>-->
+    <!--<a href="#" th:href="@{/{courseNick}(courseNick=${coursesCategoriesEntry.key.nick},-->
+    <!--courseId=${coursesCategoriesEntry.key.id})}"-->
+    <!--th:text="more..."></a>-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--</div>-->
+</header>
+</body>
 </html>

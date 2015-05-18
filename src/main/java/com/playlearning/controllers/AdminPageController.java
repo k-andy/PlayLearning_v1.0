@@ -1,7 +1,7 @@
 package com.playlearning.controllers;
 
-import com.playlearning.dao.*;
 import com.playlearning.model.*;
+import com.playlearning.utils.Constants;
 import com.playlearning.utils.DataAccessUtils;
 import com.playlearning.utils.FileWriteUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.transaction.Transactional;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,20 +25,7 @@ public class AdminPageController {
     @Autowired
     private DataAccessUtils dataAccessUtils;
 
-    private static final String RESULT_TYPE_OUTPUT = "output";
-    private static final String RESULT_TYPE_COMPILE = "compile";
-    private static final String PROJECT_CONTENT_DIRECTORY = "src/main/resources/pages/fragments/articles/courses";
-
-    private static final String LESSON_CONTENT_TYPE = "lesson";
-    private static final String EXERCISE_CONTENT_TYPE = "exercise";
-
-    private static final String CATEGORIES_DIRECTORY_NAME = "categories";
-    private static final String LESSONS_DIRECTORY_NAME = "lessons";
-    private static final String EXERCISES_DIRECTORY_NAME = "exercises";
-    private static final String PAGE_EXTENSION = ".html";
     private static final String DEFAULT_EMAIL = "test@test.test";
-    private static final String SPACE_REPLACEMENT = "_";
-    private static final String HTML_FILE_NAME_REPLACE_PATTERN = "[^a-zA-Z0-9]+";
 
     @RequestMapping("/admin")
     public String admin(Model model) {
@@ -77,26 +63,26 @@ public class AdminPageController {
                         List<Lesson> allLessonsForCategory = dataAccessUtils.getAllLessonsForCategory(category);
                         if (allLessonsForCategory != null) {
                             for (Lesson lesson : allLessonsForCategory) {
-                                String lessonDirPath = System.getProperty("user.dir") + File.separator + PROJECT_CONTENT_DIRECTORY +
-                                        File.separator + course.getName() + File.separator + CATEGORIES_DIRECTORY_NAME + File.separator +
+                                String lessonDirPath = Constants.COURSES_PATH +
+                                        File.separator + course.getName() + File.separator + Constants.CATEGORIES_DIRECTORY_NAME + File.separator +
                                         category.getNumber() + " " +
-                                        category.getName().replaceAll("/", SPACE_REPLACEMENT).replaceAll("\\\\", SPACE_REPLACEMENT) + File.separator +
-                                        LESSONS_DIRECTORY_NAME + File.separator +
-                                        lesson.getNumber() + " " + lesson.getName().replaceAll("/", SPACE_REPLACEMENT).replaceAll("\\\\", SPACE_REPLACEMENT);
-                                String exerciseDirPath = lessonDirPath + File.separator + EXERCISES_DIRECTORY_NAME;
+                                        category.getName().replaceAll("/", Constants.SPACE_REPLACEMENT.getConstant()).replaceAll("\\\\", Constants.SPACE_REPLACEMENT.getConstant()) +
+                                        File.separator + Constants.LESSONS_DIRECTORY_NAME + File.separator +
+                                        lesson.getNumber() + " " + lesson.getName().replaceAll("/", Constants.SPACE_REPLACEMENT.getConstant()).replaceAll("\\\\", Constants.SPACE_REPLACEMENT.getConstant());
+                                String exerciseDirPath = lessonDirPath + File.separator + Constants.EXERCISES_DIRECTORY_NAME;
                                 File file = new File(exerciseDirPath);
                                 if (!file.exists()) {
                                     file.mkdirs();
                                 }
-                                file = new File(lessonDirPath, lesson.getHtml() + PAGE_EXTENSION);
+                                file = new File(lessonDirPath, lesson.getHtml() + Constants.PAGE_EXTENSION);
                                 FileWriteUtils.createHtmlFile(file);
-                                FileWriteUtils.writeHtmlFile(FileWriteUtils.createHtmlContent(LESSON_CONTENT_TYPE, lesson.getName()), file.getPath());
+                                FileWriteUtils.writeToFile(FileWriteUtils.createHtmlContent(Constants.LESSON_CONTENT_TYPE, lesson.getName()), file.getPath());
                                 List<Exercise> allExercisesForLesson = dataAccessUtils.getAllExercisesForLesson(lesson);
                                 if (allExercisesForLesson != null) {
                                     for (Exercise exercise : allExercisesForLesson) {
-                                        file = new File(exerciseDirPath, exercise.getHtml() + PAGE_EXTENSION);
+                                        file = new File(exerciseDirPath, exercise.getHtml() + Constants.PAGE_EXTENSION);
                                         FileWriteUtils.createHtmlFile(file);
-                                        FileWriteUtils.writeHtmlFile(FileWriteUtils.createHtmlContent(EXERCISE_CONTENT_TYPE, lesson.getName()), file.getPath());
+                                        FileWriteUtils.writeToFile(FileWriteUtils.createHtmlContent(Constants.EXERCISE_CONTENT_TYPE, lesson.getName()), file.getPath());
                                     }
                                 }
                             }
@@ -177,16 +163,24 @@ public class AdminPageController {
         Lesson lesson = dataAccessUtils.getLessonById(lessonId);
         result.add(lesson.getNumber() + "");
         List<Exercise> allExercisesForLesson = dataAccessUtils.getAllExercisesForLesson(lesson);
+        String pathToHtml = Constants.COURSES_PATH + File.separator + lesson.getCategoriesByCategoryId().getCoursesByCourseId().getName() +
+                File.separator + Constants.CATEGORIES_FOLDER_NAME + File.separator + lesson.getCategoriesByCategoryId().getNumber() +
+                " " + lesson.getCategoriesByCategoryId().getName() +
+                File.separator + Constants.LESSONS_FOLDER_NAME + File.separator + lesson.getNumber() + " " + lesson.getName() +
+                File.separator + lesson.getHtml();
+
         if (allExercisesForLesson != null) {
             stringBuilder.append("<option value=\"-1\">select exercise</option>");
             for (Exercise exercise : allExercisesForLesson) {
                 stringBuilder.append("<option value=\"" + exercise.getId() + "\">" + exercise.getNumber() + "</option>");
             }
+
             result.add(stringBuilder.toString());
-            return result;
-        } else {
-            return result;
+            result.add(FileWriteUtils.readFile(pathToHtml + ".html"));
+        } else if (new File(pathToHtml + ".html").exists()) {
+            result.add(FileWriteUtils.readFile(pathToHtml + ".html"));
         }
+        return result;
     }
 
     @RequestMapping("/getResultsForExercise")
@@ -197,7 +191,7 @@ public class AdminPageController {
 
         result.add(exercise.getType());
 
-        if (exercise.getType().equals(RESULT_TYPE_OUTPUT)) {
+        if (exercise.getType().equals(Constants.RESULT_TYPE_OUTPUT)) {
             result.add(dataAccessUtils.getResultForExercise(exercise) == null ? "" : dataAccessUtils.getResultForExercise(exercise).getOutput());
         } else {
             String classes = "";
@@ -234,6 +228,7 @@ public class AdminPageController {
         }
 
         course.setName(courseName);
+        course.setNick(courseName.replaceAll(" ", Constants.SPACE_REPLACEMENT.getConstant()).toLowerCase());
         dataAccessUtils.addCourse(course);
 
         return getAllCoursesAsHtmlOptions(course.getId());
@@ -256,8 +251,11 @@ public class AdminPageController {
 
     @RequestMapping("/addOrUpdateCategory")
     @ResponseBody
-    public String addOrUpdateCategory(@ModelAttribute(value = "courseId") int courseId, @ModelAttribute(value = "categoryId") int categoryId,
-                                      @ModelAttribute(value = "categoryName") String categoryName, @ModelAttribute(value = "categoryNumber") int categoryNumber,
+    public String addOrUpdateCategory(@ModelAttribute(value = "courseId") int courseId,
+                                      @ModelAttribute(value = "categoryId") int categoryId,
+                                      @ModelAttribute(value = "categoryName") String categoryName,
+                                      @ModelAttribute(value = "categoryNick") String categoryNick,
+                                      @ModelAttribute(value = "categoryNumber") String categoryNumber,
                                       @ModelAttribute(value = "categoryNames") String categoryNames) {
         Category category = new Category();
         Course course = dataAccessUtils.getCourseById(courseId);
@@ -267,35 +265,38 @@ public class AdminPageController {
             } else {
                 category = new Category();
             }
-            if (categoryNumber != 0) {
+            if (!categoryNumber.equals("")) {
+                int categoryNumberInt = Integer.parseInt(categoryNumber);
                 List<Category> allCategoriesForCourse = dataAccessUtils.getAllCategoriesForCourse(course);
                 if (allCategoriesForCourse != null) {
                     for (Category tmpCategory : allCategoriesForCourse) {
-                        if (tmpCategory.getNumber() >= categoryNumber) {
+                        if (tmpCategory.getNumber() >= categoryNumberInt) {
                             tmpCategory.setNumber(tmpCategory.getNumber() + 1);
                             dataAccessUtils.addCategory(tmpCategory);
                         }
                     }
                 }
-                category.setNumber(categoryNumber);
+                category.setNumber(categoryNumberInt);
             } else {
                 category.setNumber(dataAccessUtils.getLastCategoryNumber(course) + 1);
             }
-            addCategory(category, course, categoryName);
+            addCategory(category, course, categoryName, (categoryNick.length() == 0 ? categoryName : categoryNick).replaceAll(" ", "-").toLowerCase());
         } else {
             String[] categoryNameList = categoryNames.split("\\n");
             for (String categoryNameFromList : categoryNameList) {
                 category = new Category();
                 category.setNumber(dataAccessUtils.getLastCategoryNumber(course) + 1);
-                addCategory(category, course, categoryNameFromList);
+                String[] strings = categoryNameFromList.split("|");
+                addCategory(category, course, strings[0], (strings[1].length() == 0 ? strings[1] : strings[0]).replaceAll(" ", "-").toLowerCase());
             }
         }
 
         return getAllCategoriesAsHtmlOptions(course, category.getId());
     }
 
-    private void addCategory(Category category, Course course, String categoryNameFromList) {
+    private void addCategory(Category category, Course course, String categoryNameFromList, String categoryNick) {
         category.setName(categoryNameFromList);
+        category.setNick(categoryNick);
         category.setCoursesByCourseId(course);
         dataAccessUtils.addCategory(category);
     }
@@ -317,8 +318,11 @@ public class AdminPageController {
 
     @RequestMapping("/addOrUpdateLesson")
     @ResponseBody
-    public String addOrUpdateLesson(@ModelAttribute(value = "categoryId") int categoryId, @ModelAttribute(value = "lessonId") int lessonId,
-                                    @ModelAttribute(value = "lessonName") String lessonName, @ModelAttribute(value = "lessonNumber") int lessonNumber,
+    public String addOrUpdateLesson(@ModelAttribute(value = "categoryId") int categoryId,
+                                    @ModelAttribute(value = "lessonId") int lessonId,
+                                    @ModelAttribute(value = "lessonName") String lessonName,
+                                    @ModelAttribute(value = "lessonNick") String lessonNick,
+                                    @ModelAttribute(value = "lessonNumber") String lessonNumber,
                                     @ModelAttribute(value = "lessonNames") String lessonNames) {
         Lesson lesson = new Lesson();
         Category category = dataAccessUtils.getCategoryById(categoryId);
@@ -328,35 +332,55 @@ public class AdminPageController {
             } else {
                 lesson = new Lesson();
             }
-            if (lessonNumber != 0) {
+            if (!lessonNumber.equals("")) {
+                int lessonNumberInt = Integer.parseInt(lessonNumber);
                 List<Lesson> allLessonsForCategory = dataAccessUtils.getAllLessonsForCategory(category);
                 if (allLessonsForCategory != null) {
                     for (Lesson tmpLesson : allLessonsForCategory) {
-                        if (tmpLesson.getNumber() >= lessonNumber) {
+                        if (tmpLesson.getNumber() >= lessonNumberInt) {
                             tmpLesson.setNumber(tmpLesson.getNumber() + 1);
                             dataAccessUtils.addLesson(tmpLesson);
                         }
                     }
                 }
-                lesson.setNumber(lessonNumber);
+                lesson.setNumber(lessonNumberInt);
             } else {
                 lesson.setNumber(dataAccessUtils.getLastLessonNumber(category) + 1);
             }
-            addLesson(lessonName, lesson, category);
+            addLesson(lessonName, lesson, category, (lessonNick.length() == 0 ? lessonName : lessonNick).replaceAll(" ", Constants.SPACE_REPLACEMENT.getConstant()).toLowerCase());
         } else {
             String[] lessonNameList = lessonNames.split("\\n");
             for (String lessonNameFromList : lessonNameList) {
                 lesson = new Lesson();
-                addLesson(lessonNameFromList, lesson, category);
+                String[] strings = lessonNameFromList.split("|");
+                addLesson(strings[0], lesson, category, (strings[1].length() == 0 ? strings[1] : strings[0]).replaceAll(" ", Constants.SPACE_REPLACEMENT.getConstant()).toLowerCase());
             }
         }
 
         return getAllLessonsAsHtmlOptions(category, lesson.getId());
     }
 
-    private void addLesson(String lessonName, Lesson lesson, Category category) {
+    @RequestMapping("/saveToLessonFileButton")
+    @ResponseBody
+    public String saveToLessonFileButton(@ModelAttribute(value = "lessonId") int lessonId,
+                                         @ModelAttribute(value = "lessonHtml") String lessonHtml) {
+        Lesson lesson = dataAccessUtils.getLessonById(lessonId);
+
+        String pathToHtml = Constants.COURSES_PATH + File.separator + lesson.getCategoriesByCategoryId().getCoursesByCourseId().getName() +
+                File.separator + Constants.CATEGORIES_FOLDER_NAME + File.separator + lesson.getCategoriesByCategoryId().getNumber() +
+                " " + lesson.getCategoriesByCategoryId().getName() +
+                File.separator + Constants.LESSONS_FOLDER_NAME + File.separator + lesson.getNumber() + " " + lesson.getName() +
+                File.separator + lesson.getHtml();
+
+
+        FileWriteUtils.writeToFile(lessonHtml, pathToHtml + ".html");
+        return "";
+    }
+
+    private void addLesson(String lessonName, Lesson lesson, Category category, String lessonNick) {
         lesson.setName(lessonName);
-        lesson.setHtml(lessonName.replaceAll(HTML_FILE_NAME_REPLACE_PATTERN, SPACE_REPLACEMENT));
+        lesson.setNick(lessonNick);
+        lesson.setHtml(lessonName.replaceAll(Constants.HTML_FILE_NAME_REPLACE_PATTERN.getConstant(), Constants.SPACE_REPLACEMENT.getConstant()));
         lesson.setCategoriesByCategoryId(category);
         dataAccessUtils.addLesson(lesson);
     }
@@ -382,10 +406,10 @@ public class AdminPageController {
         Lesson lesson = dataAccessUtils.getLessonById(lessonId);
         Exercise exercise = new Exercise();
 
-        exercise.setType(RESULT_TYPE_OUTPUT);
+        exercise.setType(Constants.RESULT_TYPE_OUTPUT.getConstant());
         exercise.setLessonsByLessonId(lesson);
         exercise.setNumber(dataAccessUtils.getLastExerciseNumber(lesson) + 1);
-        exercise.setHtml(lesson.getHtml() + SPACE_REPLACEMENT + exercise.getNumber());
+        exercise.setHtml(lesson.getHtml() + Constants.SPACE_REPLACEMENT + exercise.getNumber());
 
         dataAccessUtils.addExercise(exercise);
 
@@ -417,7 +441,7 @@ public class AdminPageController {
         result.setExercisesByExerciseId(exercise);
         result.setOutput(output);
 
-        exercise.setType(RESULT_TYPE_OUTPUT);
+        exercise.setType(Constants.RESULT_TYPE_OUTPUT.getConstant());
         dataAccessUtils.addExercise(exercise);
         dataAccessUtils.addResult(result);
 
@@ -462,7 +486,7 @@ public class AdminPageController {
         field.setNames(fields);
         dataAccessUtils.addField(field);
 
-        exercise.setType(RESULT_TYPE_COMPILE);
+        exercise.setType(Constants.RESULT_TYPE_COMPILE.getConstant());
         dataAccessUtils.addExercise(exercise);
 
         Result resultForExercise = dataAccessUtils.getResultForExercise(exercise);

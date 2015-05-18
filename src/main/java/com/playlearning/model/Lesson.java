@@ -12,6 +12,7 @@ public class Lesson {
     private int id;
     private int number;
     private String html;
+    private String nick;
     private String name;
     private Collection<Exercise> exercisesById;
     private Category categoriesByCategoryId;
@@ -25,6 +26,16 @@ public class Lesson {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "nick", nullable = false, insertable = true, updatable = true, length = 30)
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     @Basic
@@ -67,6 +78,7 @@ public class Lesson {
         if (id != that.id) return false;
         if (number != that.number) return false;
         if (html != null ? !html.equals(that.html) : that.html != null) return false;
+        if (nick != null ? !nick.equals(that.nick) : that.nick != null) return false;
 
         return true;
     }

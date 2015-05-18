@@ -10,7 +10,8 @@
 
             <div th:each="lesson : ${category.lessonsesById}">
                 <div>
-                    <a href="#" th:href="@{/course/category/lesson(lessonId=${lesson.id})}"
+                    <a href="#" th:href="@{/course/{courseNick}/category/{categoryNick}/lesson/{lessonNick}(courseNick=${category.coursesByCourseId.nick},
+                    categoryNick=${category.nick},lessonNick=${lesson.nick},lessonId=${lesson.id})}"
                        th:text="${lesson.name}"></a>
                 </div>
             </div>

@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<section class="contentWrapper exerciseWrapper" th:fragment="exercise">
+    <div th:replace="${html} :: lesson"></div>
+    <div th:replace="${exercise} :: exercise"></div>
+</section>
+</body>
+</html>

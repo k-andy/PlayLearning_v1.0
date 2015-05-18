@@ -1,0 +1,19 @@
+.lessonsWrapper .lessonContainer, .lessonsWrapper .exerciseContainer {
+    padding: 5px 0;
+    display: inline-block;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.lessonsWrapper .lessonContainer {
+    background-color: brown;
+}
+
+.lessonsWrapper .exerciseContainer {
+    background-color: darkgreen;
+}
+
+.lessonsWrapper .lessonButton {
+    float: left;
+    clear: both;
+}
